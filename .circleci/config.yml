@@ -1,0 +1,53 @@
+version: 2.1
+
+parameters:
+  ci_script:
+    type: string
+    default: "./build_steps/ci.sh"
+  # cd_script:
+  #   type: string
+  #   default: "./build_steps/cd.sh"
+
+workflows:
+  ci_pipeline_only:
+    jobs:
+      - ci-pipeline
+  # scheduled_ci_cd_pipeline:
+  #   triggers:
+  #     - schedule:
+  #         # Runs every Sunday at 8PM
+  #         cron: "0 20 * * 0"
+  #         filters:
+  #           branches:
+  #             only:
+  #               - main
+  #   jobs:
+  #     - ci-pipeline
+  #     - cd-pipeline:
+  #         requires:
+  #             - ci-pipeline
+
+jobs:
+  ci-pipeline:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: "Build CI/CD and webapp docker image"
+          command: << pipeline.parameters.ci_script >> build
+      - run:
+          name: "Run unit tests"
+          command: << pipeline.parameters.ci_script >> unit_tests
+      - run:
+          name: "Run pre commit hooks (linting)"
+          command: << pipeline.parameters.ci_script >> lint
+      - run:
+          name: "Start webapp container"
+          command: << pipeline.parameters.ci_script >> up
+      - run:
+          name: "Stop webapp contain"
+          command: << pipeline.parameters.ci_script >> down
+      - run:
+          name: "Publish images to Dockerhub"
+          command: << pipeline.parameters.ci_script >> push_images
