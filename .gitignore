@@ -1,0 +1,19 @@
+__pycache__/
+.pytest_cache/
+.idea/
+.vscode/
+.coverage
+
+# python packaging
+dist/
+
+*.code-workspace
+*.ipynb
+*.log
+*.swp
+*.egg-info
+.DS_Store
+htmlcov
+
+# generated artefacts
+bin/*

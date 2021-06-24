@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "aks_demo"
+version = "1.0.0"
+description = "FastAPI webserver for the Avanade Demo"
+authors = ["Guillaume Bournique"]
+
+[tool.poetry.dependencies]
+aiofiles = "^0.6.0"                                 # Apache 2.0
+python = "^3.8.0"                                   # PSF
+python-multipart = "^0.0.5"                         # Apache 2.0
+fastapi = "^0.62.0"                                 # MIT
+requests = "^2.22"                                  # Apache 2.0
+uvicorn = "^0.13.2"                                 # BSD 3
+
+[tool.poetry.dev-dependencies]
+autoflake = "^1.4"                                  # MIT
+black = "19.10b0"                                   # MIT
+dateparser = "^1.0.0"                               # BSD 3
+flask = "^1.1.2"                                    # BSD 3
+isort = "4.3.4"                                     # MIT
+jsonschema = "^3.2.0"                               # MIT
+networkx = "^2.5"                                   # MIT
+pylint = "^2.6.0"                                   # GPL
+pytest = "6.0.0"                                    # MIT
+pytest-cov = "^2.10.1"                              # MIT
+pytest-env = "^0.6.2"                               # MIT
+pre-commit = "^2.8.2"                               # MIT
+wrapt = "^1.12.1"                                   # MIT
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+filterwarnings = '''
+    ignore::UserWarning
+'''
+markers = '''
+    integration
+'''
+python_files = ["tests.py", "test_*", "*_tests.py"]
+addopts = '''
+  --strict
+  --tb=short
+  --cov=.
+  --cov-branch
+  --cov-report=term-missing
+  --cov-report=html
+  --no-cov-on-fail
+  --cov-fail-under=0
+  --ignore=deployment/
+'''
+env = ["PYTEST_ENABLED=1"]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

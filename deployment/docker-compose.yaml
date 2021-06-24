@@ -1,0 +1,22 @@
+version: "3.5"
+
+services:
+  aks_demo:
+    image: ${IMAGE_NAME:?Missing variable in deployment/.env}
+    container_name: aks_demo
+    restart: "no"
+    environment:
+      WEBSERVER_HOST: ${WEBSERVER_HOST:?Missing variable in deployment/.env}
+      WEBSERVER_PORT: ${WEBSERVER_PORT:?Missing variable in deployment/.env}
+      RELOAD: ${RELOAD:?Missing variable in deployment/.env}
+      DEBUG: ${DEBUG:?Missing variable in deployment/.env}
+      WORKERS_COUNT: ${WORKERS_COUNT:?Missing variable in deployment/.env}
+      SECRET_KEY_HEADER: ${SECRET_KEY_HEADER:?Missing variable in deployment/.env}
+    healthcheck:
+      test: curl -f -s -S http://localhost:${WEBSERVER_PORT}/api/v1/docs || exit 1
+      interval: 30s
+      timeout: 60s
+      retries: 3
+    ports: 
+      - "${WEBSERVER_PORT}:${WEBSERVER_PORT}"
+    entrypoint: ["python", "aks_demo/run.py"]

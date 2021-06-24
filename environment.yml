@@ -1,0 +1,7 @@
+name: aks-demo
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python>=3.8                 # PSF
+  - pip>=18.1                   # MIT
