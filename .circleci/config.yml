@@ -34,14 +34,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Build CI/CD and webapp docker image"
+          name: "Build utils and webapp docker images"
           command: << pipeline.parameters.ci_script >> build
-      - run:
-          name: "Run unit tests"
-          command: << pipeline.parameters.ci_script >> unit_tests
       - run:
           name: "Run pre commit hooks (linting)"
           command: << pipeline.parameters.ci_script >> lint
+      - run:
+          name: "Run unit tests"
+          command: << pipeline.parameters.ci_script >> unit_tests
       - run:
           name: "Start webapp container"
           command: << pipeline.parameters.ci_script >> up
