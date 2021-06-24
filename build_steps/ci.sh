@@ -50,16 +50,12 @@ check_required_env_variables()
 
 set_common_env_variables()
 {
-	# Docker
 	export DOCKER_CLI_EXPERIMENTAL=enabled
 	export DOCKER_USER=gbournique
-	export IMAGE_REPOSITORY=${DOCKER_USER}/aks_demo
 	export CI_IMAGE_REPOSITORY=${DOCKER_USER}/aks_demo_cicd
-
-	# Webapp docker image
-	export DEPLOYMENT_DIR="./deployment/"
-	export WEBAPP_IMAGE_REPOSITORY=${DOCKER_USER}/${IMAGE_REPOSITORY}
+	export WEBAPP_IMAGE_REPOSITORY=${DOCKER_USER}/aks_demo
 	export WEBAPP_CONTAINER_NAME=webapp
+	export DEPLOYMENT_DIR="./deployment/"
 
 	check_required_env_variables
 }

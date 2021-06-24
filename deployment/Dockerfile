@@ -6,26 +6,22 @@ ENV REPO_HOME="/home/${USERNAME}" \
     PYTHONPATH="/home/${USERNAME}" \
     USERNAME=${USERNAME}
 
-# Add non-root user
-RUN adduser --disabled-password --gecos "" ${USERNAME}
-
 # Set working directory
 WORKDIR ${REPO_HOME}
 
-# Copy dependencies files
+# Copy package dependencies files
 COPY poetry.lock pyproject.toml ./
+
+# Add application code code to /home/aksdemouser
+COPY ./aks_demo ./aks_demo/
 
 # Install poetry and app dependencies
 RUN pip install "poetry==${POETRY_VERSION}" \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction --no-ansi \
-    && rm poetry.lock pyproject.toml
-
-# Add project source code to /home/aksdemouser
-COPY ./aks_demo ./aks_demo/
-
-# Change ownership of /home/aksdemouser to aksdemouser
-RUN chown -R ${USERNAME}:${USERNAME} ${REPO_HOME}
+    && rm poetry.lock pyproject.toml \
+    && adduser --disabled-password --gecos "" ${USERNAME} \
+    && chown -R ${USERNAME}:${USERNAME} ${REPO_HOME}
 
 # TODO: Run container as non-root
 USER ${USERNAME}

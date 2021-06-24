@@ -46,11 +46,11 @@ WORKDIR ${WORKDIR}
 COPY environment.yml poetry.lock pyproject.toml ./
 
 # Install poetry dependencies within conda environment
-RUN conda env create -f environment.yml -n aws-demo
-SHELL ["conda", "run", "-n", "aws-demo", "/bin/bash", "-c"]
+RUN conda env create -f environment.yml -n aks-demo
+SHELL ["conda", "run", "-n", "aks-demo", "/bin/bash", "-c"]
 RUN poetry install
 
 # Activate conda environment for any runtime commands
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "aws-demo"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "aks-demo"]
 
 CMD ["tail", "-f", "/dev/null"]
