@@ -3,7 +3,7 @@
 .ONESHELL:
 
 # Environment variables
-IMAGE_REPOSITORY=aks_demo:latest
+IMAGE_REPOSITORY=gbournique/aks_demo:latest
 CONDA_ENV_NAME=aks-demo
 CONDA_CREATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda env create
 CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate
