@@ -106,6 +106,7 @@ build_webapp_image() {
 		docker-ci poetry build
 		docker build -t ${WEBAPP_IMAGE_REPOSITORY}:$(webapp_image_tag) -f ./deployment/Dockerfile .
 	fi
+	docker tag ${WEBAPP_IMAGE_REPOSITORY}:$(webapp_image_tag) ${WEBAPP_IMAGE_REPOSITORY}:latest
 }
 
 unit_tests()
