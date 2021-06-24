@@ -1,6 +1,5 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
-ARG POETRY_VERSION="1.0.10"
 ARG USERNAME="aksdemouser"
 ENV REPO_HOME="/home/${USERNAME}" \
     PYTHONPATH="/home/${USERNAME}" \
@@ -9,19 +8,25 @@ ENV REPO_HOME="/home/${USERNAME}" \
 # Set working directory
 WORKDIR ${REPO_HOME}
 
+# Install poetry
+ENV POETRY_VERSION=1.1.4
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+ENV PATH /root/.poetry/bin:$PATH
+
 # Copy package dependencies files
 COPY poetry.lock pyproject.toml ./
 
-# Add application code code to /home/aksdemouser
+# Install app dependencies
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-dev --no-interaction --no-ansi \
+    && rm poetry.lock pyproject.toml
+
+# Add application code to /home/aksdemouser/aks_demo/
 COPY ./aks_demo ./aks_demo/
 
-# Install poetry and app dependencies
-RUN pip install "poetry==${POETRY_VERSION}" \
-    && poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-interaction --no-ansi \
-    && rm poetry.lock pyproject.toml \
-    && adduser --disabled-password --gecos "" ${USERNAME} \
+# Add non-root user
+RUN adduser --disabled-password --gecos "" ${USERNAME} \
     && chown -R ${USERNAME}:${USERNAME} ${REPO_HOME}
 
-# TODO: Run container as non-root
+# Run container as non-root
 USER ${USERNAME}
