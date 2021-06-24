@@ -24,7 +24,8 @@ RUN pip install "poetry==${POETRY_VERSION}" \
 # Add project source code to /home/aksdemouser
 COPY ./aks_demo ./aks_demo/
 
-# Change ownership of /home/portfolio to portfoliouser
+# Change ownership of /home/aksdemouser to aksdemouser
 RUN chown -R ${USERNAME}:${USERNAME} ${REPO_HOME}
 
 # TODO: Run container as non-root
+USER ${USERNAME}
