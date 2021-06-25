@@ -46,7 +46,7 @@ jobs:
           name: "Start webapp container"
           command: << pipeline.parameters.ci_script >> up
       - run:
-          name: "Stop webapp contain"
+          name: "Stop webapp container"
           command: << pipeline.parameters.ci_script >> down
       - run:
           name: "Publish images to Dockerhub"

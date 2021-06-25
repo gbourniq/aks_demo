@@ -1,0 +1,20 @@
+Congratulations! You have just deployed the AKS Demo app composed of the following Pods:
+- FastAPI webserver (x{{ .Values.replicaCountApp }})
+
+{{- if .Values.ingress.enabled }}
+
+Webserver URL:
+
+    - Web UI: http://{{ .Values.ingress.host }}/{{ .Values.ingress.path }}
+
+{{- else if contains "NodePort" .Values.service.type }}
+
+1. Get the Webapp URL by running these commands in your terminal:
+
+export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ .Release.Name }}-{{ .Chart.Name }})
+export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+echo http://$NODE_IP:$NODE_PORT/
+
+2. Open the application in your web browser
+
+{{- end }}

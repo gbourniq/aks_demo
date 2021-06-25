@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "aks-demo.fullname" . }}-test-connection"
+  labels:
+    {{- include "aks-demo.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  containers:
+    {{- if .Values.ingress.enabled }}
+    - name: 'wget-webserver-url'
+      image: busybox
+      command: ['wget']
+      args: ['{{ tpl .Values.ingress.host $ }}']
+    {{- end }}
+  restartPolicy: Never
+

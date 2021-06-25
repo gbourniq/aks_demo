@@ -1,0 +1,29 @@
+{{- $aksDemoAppFullname := include "aks-demo.fullname" . -}}
+
+{{- range .Values.global.aks_demo_file_mounts }}
+{{- $subPath := tpl .subPath $ -}}
+{{- $sourceFilepath := tpl .sourceFilepath $ -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $aksDemoAppFullname }}-{{ .name }}
+data:
+  {{ $subPath }}: |
+  {{ range $.Files.Lines (printf "%s" $sourceFilepath) }}
+    {{ . }}
+  {{ end }}    
+---
+{{- end}}
+
+{{- range .Values.global.aks_demo_env }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $aksDemoAppFullname }}-{{ .name }}
+data:
+{{- range $key, $value := .data -}}
+{{ $key | nindent 2 }}: {{ tpl $value $ | quote }}
+{{- end }}
+---
+{{- end}}

@@ -1,0 +1,23 @@
+{{- $serviceType := .Values.service.type -}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "aks-demo.fullname" . }}
+  labels:
+    {{- include "aks-demo.labels" . | nindent 4 }}
+spec:
+  type: {{ $serviceType }}
+  ports:
+  {{- range .Values.service.ports }}
+    - name: {{ .name | quote }}
+      protocol: {{ .protocol }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      {{- if contains "NodePort" $serviceType }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
+  {{- end }}
+
+  selector:
+    {{- include "aks-demo.selectorLabels" . | nindent 4 }}

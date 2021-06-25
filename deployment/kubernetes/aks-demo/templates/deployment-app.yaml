@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aks-demo.fullname" . }}
+  labels:
+    {{- include "aks-demo.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCountApp }}
+  selector:
+    matchLabels:
+      {{- include "aks-demo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "aks-demo.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "aks-demo.serviceAccountName" . }}
+      securityContext:
+        {{- include "aks-demo.podSecurityContext" . | nindent 8 }}
+      volumes:
+        {{- include "aks-demo.volumes" . | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-app
+          securityContext:
+            {{- include "aks-demo.securityContext" . | nindent 12 }}
+          image: {{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}
+          imagePullPolicy: {{ .Values.global.image.pullPolicy }}
+          envFrom:
+          {{- include "aks-demo.env" . | nindent 10 }}
+          {{- include "aks-demo.secrets" . | nindent 10 }}
+          ports:
+          {{- range .Values.service.ports }}
+            - name: {{ .name | quote }}
+              protocol: {{ .protocol }}
+              containerPort: {{ .targetPort }}
+          {{- end }}
+          livenessProbe:
+            {{- include "aks-demo.liveness-probe" . | nindent 12 }}
+          readinessProbe:
+            {{- include "aks-demo.readiness-probe" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources.app | nindent 12 }}
+          volumeMounts:
+            {{- include "aks-demo.volMounts" . | nindent 12 }}
+          command: ["/bin/bash", "-c"]
+          args:
+          {{- if .Values.initialStartupDelay }}
+            - >
+              echo 'waiting {{ .Values.initialStartupDelay }}s...' &&
+              sleep {{ .Values.initialStartupDelay }} &&
+              python /home/aksdemouser/aksdemo/run.py
+          {{- else -}}
+            - >
+              python /home/aksdemouser/aksdemo/run.py
+          {{- end }}

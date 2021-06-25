@@ -1,0 +1,5 @@
+apiVersion: v2
+name: aks-demo
+description: Helm chart for the AKS Demo app
+type: application
+version: 0.1.0

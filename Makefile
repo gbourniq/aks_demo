@@ -2,14 +2,18 @@
 # chain commands together with semicolon
 .ONESHELL:
 
+# Set shell
+SHELL=/bin/bash
+
 # Environment variables
 IMAGE_REPOSITORY=gbournique/aks_demo:latest
 CONDA_ENV_NAME=aks-demo
 CONDA_CREATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda env create
 CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate
-
-# Set shell
-SHELL=/bin/bash
+HELM_RELEASE=dev
+HELM_CHART_DIR=deployment/kubernetes/aks-demo
+HELM_TEMPLATES_DIR=deployment/kubernetes/packaged/
+HELM_PACKAGE_DIR=deployment/kubernetes/bin/
 
 ### environment ###
 .PHONY: env env-update
@@ -54,3 +58,22 @@ up:
 	
 down:
 	@ cd deployment && docker-compose down
+
+### Kubernetes deployment ###
+.PHONY: helm-lint helm-package helm-install
+
+helm-lint:
+	@ helm lint ${HELM_CHART_DIR}
+
+helm-template:
+	@ rm -rf ${HELM_TEMPLATES_DIR}
+	@ helm template ${HELM_RELEASE} ${HELM_CHART_DIR} --output-dir ${HELM_TEMPLATES_DIR} --dry-run
+
+helm-package:
+	@ helm package ${HELM_CHART_DIR} -d ${HELM_PACKAGE_DIR}
+
+helm-install:
+	@ helm upgrade ${HELM_RELEASE} ${HELM_CHART_DIR} --install --wait
+
+helm-tests:
+	@ helm test ${HELM_RELEASE}

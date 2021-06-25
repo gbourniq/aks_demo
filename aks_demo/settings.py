@@ -19,7 +19,7 @@ class FastApiConfig:
     API_PREFIX: str = config("API_PREFIX")
     ALLOWED_HOSTS: List[str] = config("ALLOWED_HOSTS", cast=CommaSeparatedStrings)
     DEBUG: bool = config("DEBUG", cast=bool)
-    PROJECT_DESCRIPTION: str = config("PROJECT_DESCRIPTION")
+    PROJECT_DESCRIPTION: str = f"{config('PROJECT_DESCRIPTION')} - Running on {getenv('HOSTNAME')}"
     PROJECT_NAME: str = config("PROJECT_NAME")
     ROOT_PATH: str = config("ROOT_PATH", default="/")
     VERSION: str = config("VERSION")

@@ -1,0 +1,122 @@
+# Configuration file for tbe AKS Demo App Chart
+# used by Helm for Kubernetes deployment
+
+
+# ----------------------------------------------------
+# 
+# Global configuration
+#
+# ----------------------------------------------------
+
+global:
+  # Build type (dev/prod)
+  # ----------------------------------------------------
+  build: dev
+
+  # Image
+  # ----------------------------------------------------
+  image:
+    pullPolicy: IfNotPresent
+    repository: gbournique/aks_demo
+    tag: latest
+
+  # Configmaps
+  # ----------------------------------------------------
+  aks_demo_file_mounts:
+    - name: start-server-script
+      mountPath: /home/aksdemouser/aksdemo/run.py
+      subPath: "run.py"
+      readOnly: true
+      sourceFilepath: config/run.py
+  aks_demo_env:
+    - name: env
+      data:
+        BUILD: "{{ .Values.global.build }}"
+        PYTHONPATH: "/home/aksdemouser/"
+        WEBSERVER_HOST: "0.0.0.0"
+        WEBSERVER_PORT: "5700"
+        RELOAD: "False"
+        DEBUG: "False"
+        WORKERS_COUNT: "4"
+
+  # Secrets
+  # ----------------------------------------------------
+  aks_demo_secret:
+    - name: secrets
+      data:
+        SECRET_KEY_HEADER: "secret"
+
+
+# ----------------------------------------------------
+# 
+# aks-demo configuration
+#
+# ----------------------------------------------------
+
+replicaCountApp: 1
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+resources:
+  app:
+    limits:
+      cpu: "200m"
+      memory: "200Mi"
+    requests:
+      cpu: "200m"
+      memory: "200Mi"
+
+
+# Wait 0s before starting webserver
+initialStartupDelay: "0"
+# Wait 60s before starting probes
+initialDelaySeconds: "10"
+
+readinessProbe:
+  periodSeconds: 20
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 2
+
+livenessProbe:
+  periodSeconds: 20
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 2
+
+service:
+  type: NodePort
+  ports:
+    - name: webserver
+      protocol: TCP
+      port: 5700
+      targetPort: 5700
+      nodePort: 31435
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  host: host.com
+  path: ""
+  service: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  port: 5700
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
+
+env: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "aksdemouser"
