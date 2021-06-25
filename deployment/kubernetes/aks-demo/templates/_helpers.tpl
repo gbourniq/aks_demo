@@ -75,7 +75,7 @@ Generate configMapRef data to be injected into deployment
 */}}
 {{- define "aks-demo.env" -}}
 {{- $aksDemoAppFullname := include "aks-demo.fullname" . -}}
-{{- range .Values.global.aks_demo_env }}
+{{- range .Values.global.aks_demo_env -}}
 - configMapRef:
     name: {{ $aksDemoAppFullname }}-{{ .name }}
 {{- end }}
@@ -87,7 +87,7 @@ Generate secretRef data to be injected into deployment
 */}}
 {{- define "aks-demo.secrets" -}}
 {{- $aksDemoAppFullname := include "aks-demo.fullname" . -}}
-{{- range .Values.global.aks_demo_secret }}
+{{- range .Values.global.aks_demo_secret -}}
 - secretRef:
     name: {{ $aksDemoAppFullname }}-{{ .name }}
 {{- end }}
@@ -101,7 +101,7 @@ Generate a list of volumes to be injected into deployment
 
 {{- $aksDemoAppFullname := include "aks-demo.fullname" . -}}
 
-{{- range .Values.global.aks_demo_file_mounts }}
+{{- range .Values.global.aks_demo_file_mounts -}}
 - name: {{ .name }}
   configMap:
     name: {{ $aksDemoAppFullname }}-{{ .name }}
@@ -115,7 +115,7 @@ Generate a list of volumes mounts for the aks-demo container
 */}}
 {{- define "aks-demo.volMounts" -}}
 
-{{- range .Values.global.aks_demo_file_mounts }}
+{{- range .Values.global.aks_demo_file_mounts -}}
 - name: {{ .name }}
   mountPath: {{ tpl .mountPath $ }}
   subPath: {{ tpl .subPath $ }}

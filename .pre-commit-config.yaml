@@ -6,7 +6,7 @@ repos:
         stages: [commit]
         language: system
         entry: autoflake
-        args: 
+        args:
           - "--in-place"
           - "--remove-all-unused-imports"
           - "--remove-unused-variables"
@@ -18,7 +18,7 @@ repos:
         stages: [commit]
         language: system
         entry: isort
-        args: 
+        args:
           - "--line-width"
           - "88"
           - "--multi-line"

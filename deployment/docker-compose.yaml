@@ -17,6 +17,6 @@ services:
       interval: 30s
       timeout: 60s
       retries: 3
-    ports: 
+    ports:
       - "${WEBSERVER_PORT}:${WEBSERVER_PORT}"
     entrypoint: ["python", "aks_demo/run.py"]

@@ -1,4 +1,6 @@
-{{- $aksDemoAppFullname := include "aks-demo.fullname" . -}}
+---
+# yamllint disable rule:trailing-spaces
+{{ $aksDemoAppFullname := include "aks-demo.fullname" . -}}
 
 {{- range .Values.global.aks_demo_file_mounts }}
 {{- $subPath := tpl .subPath $ -}}
@@ -11,8 +13,8 @@ metadata:
 data:
   {{ $subPath }}: |
   {{ range $.Files.Lines (printf "%s" $sourceFilepath) }}
-    {{ . }}
-  {{ end }}    
+    {{ . -}}
+  {{- end }}
 ---
 {{- end}}
 

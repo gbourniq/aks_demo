@@ -60,7 +60,10 @@ down:
 	@ cd deployment && docker-compose down
 
 ### Kubernetes deployment ###
-.PHONY: helm-lint helm-package helm-install
+.PHONY: yaml-lint helm-lint helm-template helm-package helm-install helm-publish
+
+yaml-lint:
+	@ yamllint . -d relaxed --no-warnings
 
 helm-lint:
 	@ helm lint ${HELM_CHART_DIR}
@@ -77,3 +80,6 @@ helm-install:
 
 helm-tests:
 	@ helm test ${HELM_RELEASE}
+
+helm-publish:
+	@ echo "Work in progress"

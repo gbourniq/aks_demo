@@ -1,7 +1,10 @@
+---
+{{- $aksDemoAppFullname := include "aks-demo.fullname" . -}}
+
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "aks-demo.fullname" . }}-test-connection"
+  name: {{ $aksDemoAppFullname }}-test-connection
   labels:
     {{- include "aks-demo.labels" . | nindent 4 }}
   annotations:

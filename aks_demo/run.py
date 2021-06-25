@@ -8,7 +8,6 @@ import uvicorn
 from aks_demo.settings import UvicornConfig
 
 if __name__ == "__main__":
-
     uvicorn.run(
         UvicornConfig.FASTAPI_APP,
         host=UvicornConfig.WEBSERVER_HOST,

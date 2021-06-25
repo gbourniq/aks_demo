@@ -26,6 +26,7 @@ pytest-cov = "^2.10.1"                              # MIT
 pytest-env = "^0.6.2"                               # MIT
 pre-commit = "^2.8.2"                               # MIT
 wrapt = "^1.12.1"                                   # MIT
+yamllint = "^1.25.0"                                # GNU
 
 [tool.pytest.ini_options]
 testpaths = "tests"

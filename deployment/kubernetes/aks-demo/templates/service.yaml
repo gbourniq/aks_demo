@@ -1,3 +1,4 @@
+---
 {{- $serviceType := .Values.service.type -}}
 
 apiVersion: v1
