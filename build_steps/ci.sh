@@ -34,6 +34,7 @@ help_text()
     echo "  up            🟢  Start webapp container"
     echo "  down          🔴  Stop webapp container"
     echo "  push_images   🐳  Publish images to Dockerhub"
+	echo "  helm_build    📦  Run helm lint, template, and package"
     echo "  run           🚀  Run all CI steps"
 }
 
@@ -134,6 +135,14 @@ publish_image()
 	docker push $1:latest
 }
 
+helm_build()
+{
+	docker-ci helm lint deployment/kubernetes/aks-demo
+	docker-ci helm template dev deployment/kubernetes/aks-demo --output-dir deployment/kubernetes/packaged/ --dry-run
+	docker-ci helm package deployment/kubernetes/aks-demo -d deployment/kubernetes/bin/
+	# docker-ci helm publish ...
+}
+
 # Script starting point
 if [[ -n $1 ]]; then
 	case "$1" in
@@ -175,6 +184,12 @@ if [[ -n $1 ]]; then
 			publish_image ${CI_IMAGE_REPOSITORY} $(ci_image_tag)
 			exit 0
 			;;
+		helm_build)
+			printf "📦  Run helm lint, template, and package...\n"
+			set_common_env_variables
+			helm_build
+			exit 0
+			;;
 		run)
 			printf "🚀 Running CI pipeline steps (for local troubleshooting)...\n"
 			set_common_env_variables
@@ -186,6 +201,7 @@ if [[ -n $1 ]]; then
 			down
 			publish_image ${WEBAPP_IMAGE_REPOSITORY} $(webapp_image_tag)
 			publish_image ${CI_IMAGE_REPOSITORY} $(ci_image_tag)
+			helm_build
 			exit 0
 			;;
 		*)

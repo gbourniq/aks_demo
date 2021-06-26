@@ -50,6 +50,17 @@ RUN conda env create -f environment.yml -n aks-demo
 SHELL ["conda", "run", "-n", "aks-demo", "/bin/bash", "-c"]
 RUN poetry install
 
+ENV KUBECTL_VERSION="v1.20.5"
+ENV HELM_VERSION="v3.5.2"
+
+# Install kubectl
+RUN wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl \
+    && chmod +x /usr/local/bin/kubectl
+
+# Install helm
+RUN wget -q https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm \
+    && chmod +x /usr/local/bin/helm
+
 # Activate conda environment for any runtime commands
 ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "aks-demo"]
 

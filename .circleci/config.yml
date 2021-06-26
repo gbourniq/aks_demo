@@ -51,3 +51,6 @@ jobs:
       - run:
           name: "Publish images to Dockerhub"
           command: << pipeline.parameters.ci_script >> push_images
+      - run:
+          name: "Package Helm charts"
+          command: << pipeline.parameters.ci_script >> helm_build
