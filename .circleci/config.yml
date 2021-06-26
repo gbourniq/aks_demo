@@ -49,7 +49,7 @@ jobs:
           name: "Stop webapp container"
           command: << pipeline.parameters.ci_script >> down
       - run:
-          name: "Publish images to Dockerhub"
+          name: "Publish images to ACR"
           command: << pipeline.parameters.ci_script >> push_images
       - run:
           name: "Package Helm charts"

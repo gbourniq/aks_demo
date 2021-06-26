@@ -78,6 +78,7 @@ ci_image_tag() {
 
 build_ci_image() {
 	printf "Building ci docker image ${CI_IMAGE_REPOSITORY}:$(ci_image_tag)...\n"
+	echo ${DOCKER_PASSWORD} | docker login ${CONTAINER_REGISTRY} --username ${DOCKER_USER} --password-stdin 2>&1
 	if docker manifest inspect ${CI_IMAGE_REPOSITORY}:$(ci_image_tag) >/dev/null 2>&1; then
 		echo Docker image ${CI_IMAGE_REPOSITORY}:$(ci_image_tag) already exists on Dockerhub! Not building.
 		docker pull ${CI_IMAGE_REPOSITORY}:$(ci_image_tag)
@@ -96,6 +97,7 @@ webapp_image_tag() {
 
 build_webapp_image() {
 	printf "Building webapp docker image ${WEBAPP_IMAGE_REPOSITORY}:$(webapp_image_tag)...\n"
+	echo ${DOCKER_PASSWORD} | docker login ${CONTAINER_REGISTRY} --username ${DOCKER_USER} --password-stdin 2>&1
 	if docker manifest inspect ${WEBAPP_IMAGE_REPOSITORY}:$(webapp_image_tag) >/dev/null 2>&1; then
 		echo Docker image ${WEBAPP_IMAGE_REPOSITORY}:$(webapp_image_tag) already exists on Dockerhub! Not building.
 		docker pull ${WEBAPP_IMAGE_REPOSITORY}:$(webapp_image_tag)
