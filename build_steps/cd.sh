@@ -49,6 +49,8 @@ set_common_env_variables()
 	export IMAGE_TAG=$(webapp_image_tag)
 	# export SERVICE_ACCOUNT_PWD= # set as a local environment variable
 
+	echo ${DOCKER_PASSWORD} | docker login ${CONTAINER_REGISTRY} --username ${DOCKER_USER} --password-stdin 2>&1
+
 }
 
 # To run command within a container which has all required packages installed
