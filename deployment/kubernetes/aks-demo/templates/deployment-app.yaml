@@ -15,6 +15,8 @@ spec:
       labels:
         {{- include "aks-demo.selectorLabels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+        - name: acr-credentials
       serviceAccountName: {{ include "aks-demo.serviceAccountName" . }}
       securityContext:
         {{- include "aks-demo.podSecurityContext" . | nindent 8 }}
