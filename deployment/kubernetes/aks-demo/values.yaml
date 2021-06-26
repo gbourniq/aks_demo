@@ -99,14 +99,15 @@ service:
       targetPort: 5700
       # nodePort: 31435
 
+# routing rules to k8s services
 ingress:
-  enabled: false
+  enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-  host: host.com
-  path: /
+  host: aks-demo.bournique.fr
+  path: ""
   service: "{{ .Release.Name }}-{{ .Chart.Name }}"
-  port: 80
+  port: 5700
 
 nodeSelector: {}
 
