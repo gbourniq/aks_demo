@@ -14,6 +14,7 @@ HELM_RELEASE=dev
 HELM_CHART_DIR=deployment/kubernetes/aks-demo
 HELM_TEMPLATES_DIR=deployment/kubernetes/packaged/
 HELM_PACKAGE_DIR=deployment/kubernetes/bin/
+K8S_NAMESPACE=aks-demo-playground
 
 ### environment ###
 .PHONY: env env-update
@@ -63,23 +64,25 @@ down:
 .PHONY: yaml-lint helm-lint helm-template helm-package helm-install helm-publish
 
 yaml-lint:
-	@ yamllint . -d relaxed --no-warnings
+	yamllint . -d relaxed --no-warnings
 
 helm-lint:
-	@ helm lint ${HELM_CHART_DIR}
+	helm lint ${HELM_CHART_DIR}
 
 helm-template:
-	@ rm -rf ${HELM_TEMPLATES_DIR}
-	@ helm template ${HELM_RELEASE} ${HELM_CHART_DIR} --output-dir ${HELM_TEMPLATES_DIR} --dry-run
+	helm template ${HELM_RELEASE} ${HELM_CHART_DIR} --output-dir ${HELM_TEMPLATES_DIR} --dry-run
 
 helm-package:
-	@ helm package ${HELM_CHART_DIR} -d ${HELM_PACKAGE_DIR}
+	helm package ${HELM_CHART_DIR} -d ${HELM_PACKAGE_DIR}
 
 helm-install:
-	@ helm upgrade ${HELM_RELEASE} ${HELM_CHART_DIR} --install --wait
+	helm upgrade ${HELM_RELEASE} ${HELM_CHART_DIR} --install --wait -n ${K8S_NAMESPACE}
+
+helm-uninstall:
+	helm uninstall ${HELM_RELEASE} -n ${K8S_NAMESPACE}
 
 helm-tests:
-	@ helm test ${HELM_RELEASE}
+	helm test ${HELM_RELEASE}
 
 helm-publish:
 	@ echo "Work in progress"

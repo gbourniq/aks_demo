@@ -91,13 +91,13 @@ livenessProbe:
   failureThreshold: 2
 
 service:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: webserver
       protocol: TCP
       port: 5700
       targetPort: 5700
-      nodePort: 31435
+      # nodePort: 31435
 
 ingress:
   enabled: false
@@ -106,7 +106,7 @@ ingress:
   host: host.com
   path: ""
   service: "{{ .Release.Name }}-{{ .Chart.Name }}"
-  port: 5700
+  port: 80
 
 nodeSelector: {}
 
