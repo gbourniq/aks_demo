@@ -75,7 +75,7 @@ helm_install()
 {
 	docker-cd "az login --service-principal --username $APP_ID --password $SERVICE_ACCOUNT_PWD --tenant $TENANT_ID && az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME"
 	docker-cd "az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME"
-	docker-cd "helm upgrade dev deployment/kubernetes/aks-demo --set Values.global.image.tag=$IMAGE_TAG --install --wait -n $CLUSTER_NS"
+	docker-cd "helm upgrade dev deployment/kubernetes/aks-demo --set global.image.tag=$IMAGE_TAG --install --wait -n $CLUSTER_NS"
 }
 
 helm_uninstall()
