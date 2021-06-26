@@ -5,7 +5,7 @@ set -ex
 
 # Create public ip:
 # az network public-ip create --resource-group MC_aks_demo_aks-demo-cluster_uksouth --name myAKSPublicIPForIngress --sku Standard --allocation-method static --query publicIp.ipAddress -o tsv
-PUBLIC_IP="20.90.188.180"
+PUBLIC_IP="51.104.17.24"
 CLUSTER_NAMESPACE="${CLUSTER_NAMESPACE:-load-balancer}"
 
 echo $'\n\t>> Deploying ingress-nginx using helm...\n'
