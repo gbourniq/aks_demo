@@ -17,7 +17,7 @@ global:
   # ----------------------------------------------------
   image:
     pullPolicy: IfNotPresent
-    repository: gbournique/aks_demo
+    repository: gbournique.azurecr.io/gbournique/aks_demo
     tag: latest
 
   # Configmaps

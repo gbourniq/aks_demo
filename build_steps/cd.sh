@@ -36,11 +36,9 @@ help_text()
 set_common_env_variables()
 {
 	# Docker (experimental cli to use docker manifest)
+	export CONTAINER_REGISTRY=gbournique.azurecr.io
 	export DOCKER_USER=gbournique
-	export IMAGE_REPOSITORY=${DOCKER_USER}/aks_demo
-
-	# Image which contains helm and kubectl cli
-	export CD_IMAGE=${IMAGE_REPOSITORY}:latest
+	export CD_IMAGE=${CONTAINER_REGISTRY}/${DOCKER_USER}/aks_demo_cicd:latest
 
 	# Load testing
 	# export WEBSERVER_URL=https://${CFN_STACK_NAME}.bournique.fr

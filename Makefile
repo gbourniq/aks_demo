@@ -6,7 +6,7 @@
 SHELL=/bin/bash
 
 # Environment variables
-IMAGE_REPOSITORY=gbournique/aks_demo:latest
+IMAGE_NAME=gbournique.azurecr.io/gbournique/aks_demo:latest
 CONDA_ENV_NAME=aks-demo
 CONDA_CREATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda env create
 CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate
@@ -51,7 +51,7 @@ run:
 .PHONY: build up down
 
 build:
-	@ docker build -t ${IMAGE_REPOSITORY} -f deployment/Dockerfile .
+	@ docker build -t ${IMAGE_NAME} -f deployment/Dockerfile .
 
 up:
 	@ cd deployment && docker-compose up -d

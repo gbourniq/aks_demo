@@ -52,9 +52,10 @@ check_required_env_variables()
 set_common_env_variables()
 {
 	export DOCKER_CLI_EXPERIMENTAL=enabled
+	export CONTAINER_REGISTRY=gbournique.azurecr.io
 	export DOCKER_USER=gbournique
-	export CI_IMAGE_REPOSITORY=${DOCKER_USER}/aks_demo_cicd
-	export WEBAPP_IMAGE_REPOSITORY=${DOCKER_USER}/aks_demo
+	export CI_IMAGE_REPOSITORY=${CONTAINER_REGISTRY}/${DOCKER_USER}/aks_demo_cicd
+	export WEBAPP_IMAGE_REPOSITORY=${CONTAINER_REGISTRY}/${DOCKER_USER}/aks_demo
 	export WEBAPP_CONTAINER_NAME=webapp
 	export DEPLOYMENT_DIR="./deployment/"
 
@@ -128,7 +129,7 @@ down()
 
 publish_image()
 {
-	echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USER} --password-stdin 2>&1
+	echo ${DOCKER_PASSWORD} | docker login ${CONTAINER_REGISTRY} --username ${DOCKER_USER} --password-stdin 2>&1
 	printf "Publishing $1:$2...\n"
 	docker push $1:$2
 	docker tag $1:$2 $1:latest
