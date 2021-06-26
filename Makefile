@@ -86,3 +86,9 @@ helm-tests:
 
 helm-publish:
 	@ echo "Work in progress"
+
+ingress-controller-install:
+	./deployment/kubernetes/ingress-nginx/installer.sh
+
+ingress-controller-uninstall:
+	./deployment/kubernetes/ingress-nginx/uninstaller.sh

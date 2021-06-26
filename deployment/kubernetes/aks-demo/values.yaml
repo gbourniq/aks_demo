@@ -91,7 +91,7 @@ livenessProbe:
   failureThreshold: 2
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: webserver
       protocol: TCP
@@ -104,7 +104,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
   host: host.com
-  path: ""
+  path: /
   service: "{{ .Release.Name }}-{{ .Chart.Name }}"
   port: 80
 
