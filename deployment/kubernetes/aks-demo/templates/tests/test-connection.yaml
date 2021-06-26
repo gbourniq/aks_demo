@@ -1,4 +1,4 @@
----
+# yamllint disable-file
 {{- $aksDemoAppFullname := include "aks-demo.fullname" . -}}
 
 apiVersion: v1

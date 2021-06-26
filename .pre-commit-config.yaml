@@ -41,3 +41,10 @@ repos:
         entry: pylint
         args: ["aks_demo", "--fail-under", "9"]
         types: [python]
+
+      - id: yamllint
+        name: yamllint
+        stages: [commit]
+        language: system
+        entry: bash -c "yamllint . -d relaxed --no-warnings"
+        types: [yaml]

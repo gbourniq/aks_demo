@@ -1,5 +1,4 @@
----
-# yamllint disable rule:trailing-spaces
+# yamllint disable-file
 {{ $aksDemoAppFullname := include "aks-demo.fullname" . -}}
 
 {{- range .Values.global.aks_demo_file_mounts }}
@@ -11,6 +10,7 @@ kind: ConfigMap
 metadata:
   name: {{ $aksDemoAppFullname }}-{{ .name }}
 data:
+  # yamllint disable rule:trailing-spaces
   {{ $subPath }}: |
   {{ range $.Files.Lines (printf "%s" $sourceFilepath) }}
     {{ . -}}
