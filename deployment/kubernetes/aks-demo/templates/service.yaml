@@ -1,5 +1,5 @@
 # yamllint disable-file
-{{- $serviceType := .Values.service.type -}}
+{{ $serviceType := .Values.service.type -}}
 
 apiVersion: v1
 kind: Service
