@@ -4,14 +4,15 @@ parameters:
   ci_script:
     type: string
     default: "./build_steps/ci.sh"
-  # cd_script:
-  #   type: string
-  #   default: "./build_steps/cd.sh"
+  cd_script:
+    type: string
+    default: "./build_steps/cd.sh"
 
 workflows:
-  ci_pipeline_only:
+  cicd_pipeline:
     jobs:
       - ci-pipeline
+      - cd-pipeline
   # scheduled_ci_cd_pipeline:
   #   triggers:
   #     - schedule:
@@ -54,3 +55,14 @@ jobs:
       - run:
           name: "Package Helm charts"
           command: << pipeline.parameters.ci_script >> helm_build
+  cd-pipeline:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: "Install Helm chart to AWS cluster"
+          command: << pipeline.parameters.cd_script >> helm_install
+      # - run:
+      #     name: "Uninstall Helm chart application"
+      #     command: << pipeline.parameters.cd_script >> lint

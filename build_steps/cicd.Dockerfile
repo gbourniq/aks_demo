@@ -61,6 +61,9 @@ RUN wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_
 RUN wget -q https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm \
     && chmod +x /usr/local/bin/helm
 
+# Install Azure CLI
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
 # Activate conda environment for any runtime commands
 ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "aks-demo"]
 
