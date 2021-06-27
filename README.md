@@ -40,15 +40,13 @@ This repository consists of the following exercise:
 - [CI/CD](#cicd)
   - Containerised build steps
   - CircleCI setup
+- [Future improvements](#future-improvements)
 
 ## Application overview
 
 #### FastAPI as a python web framework
-
-<p align="center">
-  <img src=".github/swagger-docs.png">
-  <i>Swagger docs generated automatically by FastAPI</i>
-</p>
+<img align="center" src=".github/swagger-docs.png">
+<p align="center"><i>Swagger docs generated automatically by FastAPI</i></p>
 
 FastAPI is chosen as a python backend web framework for the following reasons:
 - Modern web framework and simple set up
@@ -285,3 +283,26 @@ Note the following secret environment variables must be configured in the Circle
 DOCKER_PASSWORD                  <-- use by docker login to push image to ACR
 SERVICE_ACCOUNT_PWD              <-- used by CircleCI to deploy to the cluster
 ```
+
+## Future improvements
+
+This section lists future improvements to this repository:
+
+Security
+* Use `Azure DevOps` for CI/CD - remove need for ACR password and service principal for the cluster
+* Create a Let's Encrypt `SSL` certificate for HTTPS - install the [cert-manager](https://github.com/gbourniq/azure-aks-kubernetes-masterclass/tree/master/14-Ingress-SSL-with-LetsEncrypt) kubernetes service for automatic renewal
+* Cluster `encryption at rest` using a customer managed key
+* Make the `cluster private` (no DNS endpoint) and whitelist client CIDR range / IPs
+* DR: Failover to a scaled-down cluster in another region
+
+Maintainability
+* `Terraform` to create and configure cluster
+* Use `helm chart repository` (e.g. Nexus) to publish packaged helm chart
+* Store logs in `Azure Monitor Logs` and create alerts if too many `418` status code are returned (`InvalidSecretKeyHeader` errors on the POST /prediction endpoint)
+
+Costs
+* Improve `auto scaling`: scheduled based on known traffic patterns, and scale deployment from a metrics such as the incoming request on the cluster load balancer
+
+Other:
+* Build an actual ML model (e.g image classification) or call to azure `cognitive services`
+* Store state in Azure CosmosDB
