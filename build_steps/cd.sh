@@ -29,11 +29,19 @@ help_text()
     echo "Available Commands:"
     echo "  helm_install        🚚  Install Helm chart to AWS cluster"
 	echo "  helm_tests          💚  Run helm test to ensure the application is up and running"
+    echo "  load_testing        📈  Run load testing on deployed web application"
     echo "  helm_uninstall      💥  Uninstall Helm chart application"
 }
 
 set_common_env_variables()
 {
+
+	# Load testing
+	export WEBSERVER_URL=http://aks-demo.bournique.fr
+	export USERS=200
+	export SPAWN_RATE_PS=50
+	export RUN_TIME=30s
+
 	# Docker (experimental cli to use docker manifest)
 	export CONTAINER_REGISTRY=gbournique.azurecr.io
 	export DOCKER_USER=gbournique
@@ -88,6 +96,16 @@ helm_tests()
 	docker-cd "helm test $HELM_CHART_RELEASE -n $CLUSTER_NS"
 }
 
+load_testing() {
+	echo "Load testing ${WEBSERVER_URL} by spawning ${USERS} users at a rate of ${SPAWN_RATE_PS}/s and maintain a full load for ${RUN_TIME} minute(s)."
+	docker-cd locust -f utils/locustfile.py \
+		--host ${WEBSERVER_URL} \
+		--headless --users ${USERS} \
+		--spawn-rate ${SPAWN_RATE_PS} \
+		--run-time ${RUN_TIME} \
+		--only-summary
+}
+
 helm_uninstall()
 {
 	docker-cd "helm uninstall $HELM_CHART_RELEASE -n $CLUSTER_NS"
@@ -110,6 +128,11 @@ if [[ -n $1 ]]; then
 		helm_uninstall)
 			printf "💥  Uninstall Helm chart application...\n"
 			helm_uninstall
+			exit 0
+			;;
+		load_testing)
+			printf "📈 	Run load testing on deployed web application...\n"
+			load_testing
 			exit 0
 			;;
 		*)

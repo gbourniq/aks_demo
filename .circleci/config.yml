@@ -54,6 +54,9 @@ jobs:
       - run:
           name: "Run helm test to ensure the application is up and running"
           command: << pipeline.parameters.cd_script >> helm_install
+      - run:
+          name: "Load Testing application"
+          command: << pipeline.parameters.cd_script >> load_testing
       # - run:
       #     name: "Uninstall Helm chart application"
       #     command: << pipeline.parameters.cd_script >> lint
