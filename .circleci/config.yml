@@ -49,7 +49,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Install Helm chart to AWS cluster"
+          name: "Install Helm chart to AKS cluster"
           command: << pipeline.parameters.cd_script >> helm_install
       - run:
           name: "Run helm test to ensure the application is up and running"
