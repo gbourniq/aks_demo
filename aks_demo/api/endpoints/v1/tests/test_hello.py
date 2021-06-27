@@ -16,4 +16,4 @@ def test_hello_world(api_prefix_v1: str, mock_client: TestClient):
 
     # Then: The response status code is 200 and response body {"message": "Hello World"}
     assert response.status_code == HTTPStatus.OK.value
-    assert response.json()["message"] == "Hello World"
+    assert response.json()["message"] == "Hello World!"

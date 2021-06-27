@@ -15,4 +15,4 @@ async def hello():
     """
     This endpoint returns Hello World
     """
-    return {"message": "Hello World"}
+    return {"message": "Hello World!"}
