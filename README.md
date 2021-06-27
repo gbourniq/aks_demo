@@ -82,7 +82,7 @@ The `POST` endpoint is defined in `aks_demo/api/endpoints/v1/prediction.py` and 
 ## Local development
 
 ### Prerequisites
-- Clone the [aks_demo](ssh://git@github.com:gbourniq/aks_demo.git) repository and cd into it
+- Clone the [gbourniq/aks_demo](https://github.com/gbourniq/aks_demo) repository and cd into it
 - Install [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
 - Install [Poetry](https://github.com/sdispater/poetry)
 
