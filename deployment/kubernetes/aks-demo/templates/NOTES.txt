@@ -5,7 +5,7 @@ Congratulations! You have just deployed the AKS Demo app composed of the followi
 
 Webserver URL:
 
-    - Web UI: http://{{ .Values.ingress.host }}/{{ .Values.ingress.path }}
+    - Web UI: http://{{ .Values.ingress.host }}{{ .Values.ingress.path }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 

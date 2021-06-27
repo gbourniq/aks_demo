@@ -1,5 +1,5 @@
 # yamllint disable-file
-{{- $aksDemoAppFullname := include "aks-demo.fullname" . -}}
+{{ $aksDemoAppFullname := include "aks-demo.fullname" . -}}
 
 apiVersion: v1
 kind: Pod
@@ -14,9 +14,9 @@ spec:
   containers:
     {{- if .Values.ingress.enabled }}
     - name: 'wget-webserver-url'
-      image: busybox
-      command: ['wget']
-      args: ['{{ tpl .Values.ingress.host $ }}']
+      image: curlimages/curl
+      command: ['curl']
+      args: ['http://{{ .Values.ingress.host }}']
     {{- end }}
   restartPolicy: Never
 

@@ -82,7 +82,7 @@ helm-uninstall:
 	helm uninstall ${HELM_RELEASE} -n ${K8S_NAMESPACE}
 
 helm-tests:
-	helm test ${HELM_RELEASE}
+	helm test ${HELM_RELEASE} -n ${K8S_NAMESPACE}
 
 helm-publish:
 	@ echo "Work in progress"

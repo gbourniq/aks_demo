@@ -4,8 +4,8 @@
 # -E (-o errtrace): Ensures that ERR traps get inherited by functions and subshells.
 # -u (-o nounset): Treats unset variables as errors.
 # -o pipefail: This option will propagate intermediate errors when using pipes.
-# set -Eeo pipefail
-set -ex
+set -Eeo pipefail
+# set -ex
 
 script_name="$(basename -- "$0")"
 script_dir="$(dirname "$0")"
@@ -28,6 +28,7 @@ help_text()
     echo ""
     echo "Available Commands:"
     echo "  helm_install        🚚  Install Helm chart to AWS cluster"
+	echo "  helm_tests          💚  Run helm test to ensure the application is up and running"
     echo "  helm_uninstall      💥  Uninstall Helm chart application"
 }
 
@@ -36,7 +37,7 @@ set_common_env_variables()
 	# Docker (experimental cli to use docker manifest)
 	export CONTAINER_REGISTRY=gbournique.azurecr.io
 	export DOCKER_USER=gbournique
-	export CD_IMAGE=${CONTAINER_REGISTRY}/${DOCKER_USER}/aks_demo_cicd:27792099
+	export CD_IMAGE=${CONTAINER_REGISTRY}/${DOCKER_USER}/aks_demo_cicd:latest
 
 	# Azure credentials
 	# https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal?tabs=azure-cli
@@ -46,10 +47,16 @@ set_common_env_variables()
 	export RG_NAME="aks-demo-rg"
 	export CLUSTER_NAME="aks-demo-cluster"
 	export CLUSTER_NS="aks-demo-playground"
+	export HELM_CHART_RELEASE="dev"
 	export IMAGE_TAG=$(webapp_image_tag)
 	# export SERVICE_ACCOUNT_PWD= # set as a local environment variable
 
+	# connect to ACR container registry
 	echo ${DOCKER_PASSWORD} | docker login ${CONTAINER_REGISTRY} --username ${DOCKER_USER} --password-stdin 2>&1
+
+	# connect to AKS cluster
+	docker-cd "az login --service-principal --username $APP_ID --password $SERVICE_ACCOUNT_PWD --tenant $TENANT_ID && az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME"
+	docker-cd "az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME"
 
 }
 
@@ -73,16 +80,17 @@ webapp_image_tag() {
 
 helm_install()
 {
-	docker-cd "az login --service-principal --username $APP_ID --password $SERVICE_ACCOUNT_PWD --tenant $TENANT_ID && az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME"
-	docker-cd "az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME"
-	docker-cd "helm upgrade dev deployment/kubernetes/aks-demo --set global.image.tag=$IMAGE_TAG --install --wait -n $CLUSTER_NS"
+	docker-cd "helm upgrade $HELM_CHART_RELEASE deployment/kubernetes/aks-demo --set global.image.tag=$IMAGE_TAG --install --wait -n $CLUSTER_NS"
+}
+
+helm_tests()
+{
+	docker-cd "helm test $HELM_CHART_RELEASE -n $CLUSTER_NS"
 }
 
 helm_uninstall()
 {
-	docker-cd "az login --service-principal --username $APP_ID --password $SERVICE_ACCOUNT_PWD --tenant $TENANT_ID && az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME"
-	docker-cd "az aks get-credentials --resource-group $RG_NAME --name $CLUSTER_NAME"
-	docker-cd "helm uninstall dev -n $CLUSTER_NS"
+	docker-cd "helm uninstall $HELM_CHART_RELEASE -n $CLUSTER_NS"
 }
 
 # Script starting point
@@ -92,6 +100,11 @@ if [[ -n $1 ]]; then
 		helm_install)
 			printf "🚚  Install Helm chart to AWS cluster...\n"
 			helm_install
+			exit 0
+			;;
+		helm_tests)
+			printf "💚  Run helm test to ensure the application is up and running...\n"
+			helm_tests
 			exit 0
 			;;
 		helm_uninstall)
