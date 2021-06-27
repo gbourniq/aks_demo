@@ -30,34 +30,34 @@ env-update:
 .PHONY: pre-commit
 
 pre-commit:
-	@ pre-commit install -t pre-commit -t commit-msg
+	pre-commit install -t pre-commit -t commit-msg
 
 ### Development ###
 .PHONY: lint run test
 
 lint:
-	@ pre-commit run --all-files
+	pre-commit run --all-files
 
 test:
-	@ pytest .
+	pytest .
 
 cov:
-	@ open htmlcov/index.html
+	open htmlcov/index.html
 
 run:
-	@ python aks_demo/run.py
+	python aks_demo/run.py
 
 ### Docker deployment ###
 .PHONY: build up down
 
 build:
-	@ docker build -t ${IMAGE_NAME} -f deployment/Dockerfile .
+	docker build -t ${IMAGE_NAME} -f deployment/Dockerfile .
 
 up:
-	@ cd deployment && docker-compose up -d
+	cd deployment && docker-compose up -d
 	
 down:
-	@ cd deployment && docker-compose down
+	cd deployment && docker-compose down
 
 ### Kubernetes deployment ###
 .PHONY: yaml-lint helm-lint helm-template helm-package helm-install helm-publish
