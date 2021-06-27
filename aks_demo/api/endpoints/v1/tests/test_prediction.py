@@ -44,17 +44,17 @@ def test_prediction(
     assert response.status_code == HTTPStatus.OK.value
 
     # Then: The expected response is returned
-    response = dict(
+    expected = dict(
         event_id=event_id,
         input_value=input_data,
-        predicted_value=f"predicted {input_data}",
-        report_generated=False,
+        predicted_value=expected_prediction,
+        report_generated=True,
     )
-    assert response == response
+    assert response.json() == expected
 
     # Then: Expected Pydantic model for both input payload and response
     TriggerEvent.parse_raw(json.dumps(payload))
-    PredictionResponse.parse_raw(json.dumps(response))
+    PredictionResponse.parse_raw(json.dumps(response.json()))
 
 
 def test_invalid_api_key_header(
