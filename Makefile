@@ -12,7 +12,6 @@ CONDA_CREATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda env cre
 CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate
 HELM_RELEASE=dev
 HELM_CHART_DIR=deployment/kubernetes/aks-demo
-HELM_TEMPLATES_DIR=deployment/kubernetes/packaged/
 HELM_PACKAGE_DIR=deployment/kubernetes/bin/
 K8S_NAMESPACE=aks-demo-playground
 
@@ -70,7 +69,7 @@ helm-lint:
 	helm lint ${HELM_CHART_DIR}
 
 helm-template:
-	helm template ${HELM_RELEASE} ${HELM_CHART_DIR} --output-dir ${HELM_TEMPLATES_DIR} --dry-run
+	helm template ${HELM_RELEASE} ${HELM_CHART_DIR} --output-dir ${HELM_PACKAGE_DIR} --dry-run
 
 helm-package:
 	helm package ${HELM_CHART_DIR} -d ${HELM_PACKAGE_DIR}

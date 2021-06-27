@@ -17,6 +17,3 @@ htmlcov
 
 # generated artefacts
 bin
-
-# helm
-deployment/kubernetes/packaged/aks-demo/templates

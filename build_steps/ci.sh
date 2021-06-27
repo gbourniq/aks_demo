@@ -141,7 +141,7 @@ publish_image()
 helm_build()
 {
 	docker-ci helm lint deployment/kubernetes/aks-demo
-	docker-ci helm template dev deployment/kubernetes/aks-demo --output-dir deployment/kubernetes/packaged/ --dry-run
+	docker-ci helm template dev deployment/kubernetes/aks-demo --output-dir deployment/kubernetes/bin/ --dry-run
 	docker-ci helm package deployment/kubernetes/aks-demo -d deployment/kubernetes/bin/
 	# docker-ci helm publish ...
 }
