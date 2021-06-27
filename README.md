@@ -45,11 +45,11 @@ This repository consists of the following exercise:
 ## Application overview
 
 #### FastAPI as a python web framework
-<img align="center" src=".github/swagger-docs.png">
-<p align="center"><i>Swagger docs generated automatically by FastAPI</i></p>
 
-![swagger-docs.png](.github/swagger-docs.png)
-<p align="center"><i>Swagger docs generated automatically by FastAPI</i></p>
+<p align="center">
+  <img src=".github/swagger-docs.png">
+  <i>Swagger docs generated automatically by FastAPI</i>
+</p>
 
 FastAPI is chosen as a python backend web framework for the following reasons:
 - Modern web framework and simple set up
